@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "psyker"
+version = "0.1.0"
+description = "A psycopg2 library"
+authors = ["nomorepanic <nomorepanic@strangemachines.io>"]
+license = "MPL-2.0"
+include = ["LICENSE", "README.md"]
+repository = "https://github.com/strangemachines/psyker"
+classifiers = []
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+psycopg2-binary = "~2.8"
+
+
+[tool.poetry.dev-dependencies]
+coverage = "^4.5"
+flake8 = "~3.7"
+flake8-quotes = "^2.1"
+flake8-import-order = "^0.18.1"
+ipython = "~7.8"
+mkdocs = "~1.0"
+mkdocs-gitbook = "~0.0"
+objsize = "~0.3.2"
+pep8-naming = "^0.8.2"
+pytest = "~3.0"
+pytest-mock = "~1.10"
+pytest-sugar = "~0.9"
+tox = "^3.14"
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

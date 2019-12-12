@@ -1,0 +1,5 @@
+site_name: Psyker documentation
+theme:
+    name: gitbook
+nav:
+    - Home: 'index.md'

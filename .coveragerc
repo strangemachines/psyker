@@ -1,0 +1,10 @@
+[run]
+source = psyker
+branch = True
+
+[report]
+ignore_errors = True
+omit =
+    setup.py
+    .tox/*
+    .venv/*

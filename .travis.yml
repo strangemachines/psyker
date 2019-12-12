@@ -1,0 +1,18 @@
+language: python
+sudo: false
+install:
+    - pip install poetry
+    - poetry run pip install tox codacy-coverage
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
+    - poetry run python-codacy-coverage -r coverage.xml
+
+matrix:
+    include:
+        - python: 3.7
+          env: TOXENV=pep8
+        - python: 3.6
+          env: TOXENV=py36
+        - python: 3.7
+          env: TOXENV=py37
+script: tox
