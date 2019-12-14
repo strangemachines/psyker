@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
-from psyker import Column, Model, Psyker
+from psyker import Foreign, Model, Psyker
 
 from pytest import fixture
 
@@ -23,9 +23,7 @@ def fruits():
     class Fruits(Model):
         @classmethod
         def columns(cls):
-            tree = Column('tree', 'foreign', reference='trees',
-                          reference_column='id')
-            return {'name': 'str', 'tree': tree}
+            return {'name': 'str', 'tree': Foreign('tree', 'trees', 'id')}
     return Fruits
 
 
@@ -34,9 +32,7 @@ def flies():
     class Flies(Model):
         @classmethod
         def columns(cls):
-            fruit = Column('fruit', 'foreign', reference='fruits',
-                           reference_column='id')
-            return {'name': 'str', 'fruit': fruit}
+            return {'name': 'str', 'fruit': Foreign('fruit', 'fruits', 'id')}
     return Flies
 
 
@@ -80,6 +76,10 @@ def test_psyker_select__where(psyker, trees):
 def test_psyker_select__where_gt(psyker, trees):
     trees = trees.select().where(max_height='>40').get()
     assert trees[0].max_height > 40
+
+
+def test_psyker_select_where__tuple():
+    assert 0
 
 
 def test_psyker_select__limit(psyker, trees):

@@ -5,5 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
 from .Column import Column
+from .Foreign import Foreign
 
-__all__ = ['Column']
+__all__ = ['Column', 'Foreign']
