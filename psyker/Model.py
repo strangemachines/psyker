@@ -132,6 +132,13 @@ class Model:
         return cls
 
     @classmethod
+    def paginate(cls, page, items):
+        """
+        Wraps Model.limit to make paginating easier.
+        """
+        return cls.limit(items, offset=page * items)
+
+    @classmethod
     def delete(cls, **conditions):
         cls.__query__ = Query.delete(cls.__db__, cls.__table__)
         if conditions:

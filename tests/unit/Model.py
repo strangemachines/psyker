@@ -227,6 +227,13 @@ def test_model_limit__offset(query):
     query.limit.assert_called_with(1, 2)
 
 
+def test_model_paginate(patch):
+    patch.object(Model, 'limit')
+    result = Model.paginate(2, 50)
+    Model.limit.assert_called_with(50, offset=100)
+    assert result == Model.limit()
+
+
 def test_model_delete(patch):
     patch.object(Query, 'delete')
     result = Model.delete()
