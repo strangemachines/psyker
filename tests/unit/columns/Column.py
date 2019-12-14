@@ -6,8 +6,8 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from psyker.Column import Column
 from psyker.Sql import Sql
+from psyker.columns import Column
 from psyker.exceptions import FieldTypeError
 
 from pytest import fixture, mark, raises

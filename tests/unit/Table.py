@@ -4,9 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
-from psyker.Column import Column
 from psyker.Sql import Sql
 from psyker.Table import Table
+from psyker.columns import Column
 
 from pytest import fixture
 
