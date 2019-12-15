@@ -51,3 +51,10 @@ def table(magic):
 @fixture
 def db(magic):
     return magic()
+
+
+@fixture
+def target(magic):
+    target = magic()
+    target.name = 'target'
+    return target

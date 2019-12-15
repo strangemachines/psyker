@@ -62,9 +62,10 @@ class Cursor(NamedTupleCursor):
         start = len(columns)
         return self.make(model, row[start:], columns.keys(), targets[1:])
 
-    def make(self, model, row, columns, targets, row_start=0):
+    def make(self, model, row, columns, targets):
         instance = model(**dict(zip(columns, row)))
         if targets:
+            target = targets[0]
             setattr(instance, target.name, (self.make_related(row, targets), ))
         return instance
 

@@ -57,6 +57,21 @@ def test_cursor_make_related(patch, magic, cursor):
     assert result == Cursor.make()
 
 
+def test_cursor_make(magic, cursor):
+    model = magic()
+    result = cursor.make(model, ['value'], ['col'], None)
+    model.assert_called_with(col='value')
+    assert result == model()
+
+
+def test_cursor_make__related(patch, magic, cursor, target):
+    patch.object(Cursor, 'make_related')
+    model = magic()
+    result = cursor.make(model, ['value'], ['col'], [target])
+    Cursor.make_related.assert_called_with(['value'], [target])
+    assert result.target == (Cursor.make_related(), )
+
+
 @mark.skip
 def test_cursor_fetchall(patch, cursor):
     # NOTE(vesuvium): it's not possible to patch NamedTupleCursor.fetchall
