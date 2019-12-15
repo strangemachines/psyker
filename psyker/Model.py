@@ -38,7 +38,7 @@ class Model:
 
     @classmethod
     def create_table(cls):
-        cls.__db__.execute(cls.__table__.sql())
+        cls.__db__.execute(cls.__table__.sql(), None, None, None, None)
 
     @classmethod
     def execute(cls, fetch=None, mode=None):
@@ -64,7 +64,7 @@ class Model:
         """
         values = self.__table__.cast(self.as_dictionary())
         sql = Sql.insert(self.__table__.name, fetch, **values)
-        self.__db__.execute(sql, list(values.values()))
+        self.__db__.execute(sql, list(values.values()), None, None, None)
         if fetch:
             id = self.__db__.cursor.fetch_returned()
             return self.select().where(id=id).one()

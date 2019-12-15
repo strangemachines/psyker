@@ -60,7 +60,8 @@ def test_create_table(magic):
     Model.__table__ = magic()
     Model.__db__ = magic()
     Model.create_table()
-    Model.__db__.execute.assert_called_with(Model.__table__.sql())
+    Model.__db__.execute.assert_called_with(Model.__table__.sql(), None, None,
+                                            None, None)
 
 
 def test_model_execute(query):
@@ -107,7 +108,7 @@ def test_model_save(patch, model, table, db):
     model.save(fetch=None)
     table.cast.assert_called_with(Model.as_dictionary())
     Sql.insert.assert_called_with(table.name, None, **table.cast())
-    Model.__db__.execute.assert_called_with(Sql.insert(), [])
+    Model.__db__.execute.assert_called_with(Sql.insert(), [], None, None, None)
 
 
 def test_model_save__fetch(patch, model, table, db):
