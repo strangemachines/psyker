@@ -52,16 +52,20 @@ class Cursor(NamedTupleCursor):
         row_dict = dict(zip(table.columns.keys(), row))
         return self.models[table.name](**row_dict)
 
+    def make_related(self, row, targets):
+        """
+        Splits a long row resulting from a join so that related items are
+        where they should be.
+        """
+        columns = targets[0].columns
+        model = self.models[targets[0].name]
+        start = len(columns)
+        return self.make(model, row[start:], columns.keys(), targets[1:])
+
     def make(self, model, row, columns, targets, row_start=0):
         instance = model(**dict(zip(columns, row)))
         if targets:
-            target = targets[0]
-            columns = target.columns
-            model = self.models[target.name]
-            row_start = len(columns)
-            related = self.make(model, row[row_start:], columns.keys(),
-                                targets[1:])
-            setattr(instance, target.name, (related, ))
+            setattr(instance, target.name, (self.make_related(row, targets), ))
         return instance
 
     def fetchall(self, targets):
