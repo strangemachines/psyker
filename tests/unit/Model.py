@@ -66,7 +66,7 @@ def test_create_table(magic):
 def test_model_execute(query):
     Model.__query__ = query
     result = Model.execute()
-    query.execute.assert_called_with(None)
+    query.execute.assert_called_with(None, None)
     assert result == query.execute()
     assert Model.__query__ is None
 
@@ -74,7 +74,13 @@ def test_model_execute(query):
 def test_model_execute__fetch(query):
     Model.__query__ = query
     Model.execute(fetch=True)
-    query.execute.assert_called_with(True)
+    query.execute.assert_called_with(True, None)
+
+
+def test_model_execute_mode(query):
+    Model.__query__ = query
+    Model.execute(mode='mode')
+    query.execute.assert_called_with(None, 'mode')
 
 
 def test_model_as_dictionary(model, table):
@@ -187,6 +193,20 @@ def test_model_get(patch):
 
 
 def test_model_get__no_query(patch):
+    patch.many(Model, ['execute', 'select'])
+    Model.__query__ = None
+    Model.get()
+    assert Model.select.call_count == 1
+
+
+def test_model_dictionaries(patch):
+    patch.object(Model, 'execute')
+    result = Model.dictionaries()
+    Model.execute.assert_called_with(fetch=True, mode='dictionaries')
+    assert result == Model.execute()
+
+
+def test_model_dictionaries__no_query(patch):
     patch.many(Model, ['execute', 'select'])
     Model.__query__ = None
     Model.get()

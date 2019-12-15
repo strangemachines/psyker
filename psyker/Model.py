@@ -41,8 +41,8 @@ class Model:
         cls.__db__.execute(cls.__table__.sql())
 
     @classmethod
-    def execute(cls, fetch=None):
-        result = cls.__query__.execute(fetch)
+    def execute(cls, fetch=None, mode=None):
+        result = cls.__query__.execute(fetch, mode)
         cls.__query__ = None
         return result
 
@@ -111,6 +111,12 @@ class Model:
         if cls.__query__ is None:
             cls.select()
         return cls.execute(fetch=True)
+
+    @classmethod
+    def dictionaries(cls):
+        if cls.__query__ is None:
+            cls.select()
+        return cls.execute(fetch=True, mode='dictionaries')
 
     @classmethod
     def one(cls):
