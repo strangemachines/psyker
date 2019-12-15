@@ -245,8 +245,9 @@ def test_query_sql(patch, magic, query):
 def test_query_execute(patch, magic, query):
     patch.object(Query, 'build')
     query.db = magic()
-    result = query.execute('fetch')
-    query.db.execute.assert_called_with(Query.build(), [], 'fetch', ['table'])
+    result = query.execute('fetch', 'mode')
+    query.db.execute.assert_called_with(Query.build(), [], 'fetch', 'mode',
+                                        ['table'])
     assert result == query.db.execute()
 
 
@@ -254,6 +255,6 @@ def test_query_execute__count(patch, magic, query):
     patch.object(Query, 'build')
     query.db = magic()
     query.query_type = 'count'
-    result = query.execute('fetch')
+    result = query.execute('fetch', 'mode')
     query.db.count.assert_called_with(Query.build(), [])
     assert result == query.db.count()

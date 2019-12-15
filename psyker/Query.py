@@ -145,7 +145,8 @@ class Query:
     def sql(self):
         return self.db.sql(self.build())
 
-    def execute(self, fetch):
+    def execute(self, fetch, mode):
         if self.query_type == 'count':
             return self.db.count(self.build(), self.params)
-        return self.db.execute(self.build(), self.params, fetch, self.targets)
+        return self.db.execute(self.build(), self.params, fetch, mode,
+                               self.targets)
