@@ -42,7 +42,7 @@ class Db:
         self.conn.set_session(autocommit=True)
         self.cursor = self.setup_cursor(self.conn, self.models)
 
-    def execute(self, query, params=None, fetch=None, targets=None):
+    def execute(self, query, params, fetch, mode, targets):
         self.cursor.execute(query, params)
         if fetch == 'one':
             return self.cursor.fetchone(targets)

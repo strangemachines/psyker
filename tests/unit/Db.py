@@ -55,26 +55,20 @@ def test_db_connect(patch, db):
 
 def test_db_execute(magic, db):
     db.cursor = magic()
-    db.execute('query')
-    db.cursor.execute.assert_called_with('query', None)
-
-
-def test_db_execute__params(magic, db):
-    db.cursor = magic()
-    db.execute('query', 'params')
+    db.execute('query', 'params', 'fetch', 'mode', 'targets')
     db.cursor.execute.assert_called_with('query', 'params')
 
 
 def test_db_execute__fetch(magic, db):
     db.cursor = magic()
-    result = db.execute('query', 'params', fetch=True, targets='targets')
+    result = db.execute('query', 'params', True, 'mode', 'targets')
     db.cursor.fetchall.assert_called_with('targets')
     assert result == db.cursor.fetchall()
 
 
 def test_db_execute__fetchone(magic, db):
     db.cursor = magic()
-    result = db.execute('query', 'params', fetch='one', targets='targets')
+    result = db.execute('query', 'params', 'one', 'mode', 'targets')
     db.cursor.fetchone.assert_called_with('targets')
     assert result == db.cursor.fetchone()
 
