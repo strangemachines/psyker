@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
 from .Db import Db
+from .ModelFactory import ModelFactory
 
 
 class Psyker:
@@ -24,6 +25,11 @@ class Psyker:
     def add_models(self, *models):
         new_models = {model.__name__.lower(): model for model in models}
         self.models = {**self.models, **new_models}
+
+    def make_model(self, name, fields):
+        model = ModelFactory.make(name, fields)
+        self.add_models(model)
+        return model
 
     def create_tables(self):
         for model in self.models.values():

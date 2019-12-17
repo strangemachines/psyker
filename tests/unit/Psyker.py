@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
-from psyker import Db, Psyker
+from psyker import Db, ModelFactory, Psyker
 
 from pytest import fixture
 
@@ -37,6 +37,14 @@ def test_psyker_add_models(magic, psyker):
     model = magic(__name__='')
     psyker.add_models(model)
     assert psyker.models == {model.__name__: model}
+
+
+def test_psyker_make_model(patch, psyker):
+    patch.object(ModelFactory, 'make')
+    patch.object(Psyker, 'add_models')
+    result = psyker.make_model('name', 'fields')
+    Psyker.add_models.assert_called_with(result)
+    assert result == ModelFactory.make()
 
 
 def test_psyker_create_tables(magic, psyker):

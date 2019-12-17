@@ -6,7 +6,8 @@
 # -*- coding: utf-8 -*-
 from .Db import Db
 from .Model import Model
+from .ModelFactory import ModelFactory
 from .Psyker import Psyker
 from .columns import Column, Foreign
 
-__all__ = ['Column', 'Db', 'Foreign', 'Model', 'Psyker']
+__all__ = ['Column', 'Db', 'Foreign', 'Model', 'ModelFactory', 'Psyker']
