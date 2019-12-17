@@ -7,6 +7,7 @@
 import psycopg2
 
 from .Cursor import Cursor
+from .exceptions import ConnectionError
 
 
 class Db:
@@ -38,7 +39,10 @@ class Db:
         """
         Connects to the database and creates the cursor.
         """
-        self.conn = psycopg2.connect(self.url)
+        try:
+            self.conn = psycopg2.connect(self.url)
+        except psycopg2.OperationalError:
+            raise ConnectionError(self.url)
         self.conn.set_session(autocommit=True)
         self.cursor = self.setup_cursor(self.conn, self.models)
 

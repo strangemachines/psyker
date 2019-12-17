@@ -5,11 +5,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
 import psycopg2
+from psycopg2 import OperationalError
 
 from psyker.Cursor import Cursor
 from psyker.Db import Db
+from psyker.exceptions import ConnectionError
 
-from pytest import fixture
+from pytest import fixture, raises
 
 
 @fixture
@@ -51,6 +53,13 @@ def test_db_connect(patch, db):
     Db.setup_cursor.assert_called_with(db.conn, db.models)
     assert db.conn == psycopg2.connect()
     assert db.cursor == Db.setup_cursor()
+
+
+def test_db_connect__connection_error(patch, db):
+    patch.object(psycopg2, 'connect', side_effect=OperationalError)
+    patch.object(Db, 'setup_cursor')
+    with raises(ConnectionError):
+        db.connect()
 
 
 def test_db_execute(magic, db):
