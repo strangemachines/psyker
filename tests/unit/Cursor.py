@@ -57,6 +57,16 @@ def test_cursor_make_related(patch, magic, cursor):
     assert result == Cursor.make()
 
 
+def test_cursor_make_related__mode(patch, magic, cursor):
+    patch.object(Cursor, 'make_dicts')
+    target = magic(columns={'col': 'col'})
+    cursor.models = {target.name: 'model'}
+    result = cursor.make_related('row', [target], mode='dictionaries')
+    Cursor.make_dicts.assert_called_with('model', 'ow', {'col': 'col'}.keys(),
+                                         [])
+    assert result == Cursor.make_dicts()
+
+
 def test_cursor_make(magic, cursor):
     model = magic()
     result = cursor.make(model, ['value'], ['col'], None)
@@ -70,6 +80,18 @@ def test_cursor_make__related(patch, magic, cursor, target):
     result = cursor.make(model, ['value'], ['col'], [target])
     Cursor.make_related.assert_called_with(['value'], [target])
     assert result.target == (Cursor.make_related(), )
+
+
+def test_cursor_make_dicts(cursor):
+    result = cursor.make_dicts(['value'], ['col'], None)
+    assert result == {'col': 'value'}
+
+
+def test_cursor_make_dicts__related(patch, cursor, target):
+    patch.object(Cursor, 'make_related')
+    result = cursor.make_dicts(['value'], ['col'], [target])
+    Cursor.make_related.assert_called_with(['value'], [target], 'dictionaries')
+    assert result['target'] == (Cursor.make_related(), )
 
 
 @mark.skip

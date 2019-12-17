@@ -58,7 +58,13 @@ def test_psyker_insert__no_return(psyker, trees):
 
 
 def test_psyker_get(psyker, trees):
-    assert type(trees.get()) == list
+    result = trees.get()
+    assert isinstance(result[0], trees)
+
+
+def test_psyker_get__dicts(psyker, trees):
+    result = trees.dictionaries()
+    assert type(result[0]) == dict
 
 
 def test_psyker_select(psyker, trees):

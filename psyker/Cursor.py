@@ -46,13 +46,15 @@ class Cursor(NamedTupleCursor):
         row = super(NamedTupleCursor, self).fetchone()
         return row[0]
 
-    def fetchone(self, targets):
+    def fetchone(self, targets, mode=None):
         row = super(NamedTupleCursor, self).fetchone()
         table = targets[0]
         row_dict = dict(zip(table.columns.keys(), row))
+        if mode == 'dictionaries':
+            return row_dict
         return self.models[table.name](**row_dict)
 
-    def make_related(self, row, targets):
+    def make_related(self, row, targets, mode=None):
         """
         Splits a long row resulting from a join so that related items are
         where they should be.
@@ -60,6 +62,9 @@ class Cursor(NamedTupleCursor):
         columns = targets[0].columns
         model = self.models[targets[0].name]
         start = len(columns)
+        if mode == 'dictionaries':
+            return self.make_dicts(model, row[start:], columns.keys(),
+                                   targets[1:])
         return self.make(model, row[start:], columns.keys(), targets[1:])
 
     def make(self, model, row, columns, targets):
@@ -69,8 +74,19 @@ class Cursor(NamedTupleCursor):
             setattr(instance, target.name, (self.make_related(row, targets), ))
         return instance
 
-    def fetchall(self, targets):
+    def make_dicts(self, row, columns, targets):
+        instance = dict(zip(columns, row))
+        if targets:
+            related = self.make_related(row, targets, 'dictionaries')
+            instance[targets[0].name] = (related, )
+        return instance
+
+    def fetchall(self, targets, mode=None):
         rows = super(NamedTupleCursor, self).fetchall()
         columns = targets[0].columns.keys()
         model = self.models[targets[0].name]
+        if mode == 'dictionaries':
+            return [
+                self.make_dicts(r, columns, targets[1:]) for r in rows
+            ]
         return [self.make(model, row, columns, targets[1:]) for row in rows]
