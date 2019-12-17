@@ -84,8 +84,14 @@ def test_psyker_select__where_gt(psyker, trees):
     assert trees[0].max_height > 40
 
 
-def test_psyker_select_where__tuple():
-    assert 0
+def test_psyker_select_where__tuple(psyker, trees):
+    trees = trees.select().where(max_height=('>', 40)).get()
+    assert trees[0].max_height > 40
+
+
+def test_psyker_select_where__tuple_two_chars(psyker, trees):
+    trees = trees.select().where(max_height=('>=', 40)).get()
+    assert trees[0].max_height > 40
 
 
 def test_psyker_select__limit(psyker, trees):

@@ -31,12 +31,23 @@ class Query:
 
     @staticmethod
     def parse_condition(condition):
+        """
+        Transforms conditions in the correct format.
+
+        Conditions are given by users as key-value params, and arrive here as
+        (key, value) tuple.
+
+        Value can be a string with an operator prefixed, e.g. '>value', or a
+        tuple like (operator, value).
+        """
         column = condition[0]
         value = condition[1]
         if value[0:2] in ('>=', '<='):
             return (column, value[0:2], value[2:])
         elif value[0] in ('!', '>', '<'):
             return (column, value[0], value[1:])
+        elif value[0] in ('<=', '>='):
+            return (column, value[0], (value[1], ))
         return (column, '=', value)
 
     @staticmethod

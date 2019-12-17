@@ -42,6 +42,14 @@ def test_query_parse_condition__operator(operator):
     assert result == ('col', operator, 'value')
 
 
+@mark.parametrize('value', [
+    ('>', 'value'), ('>=', 'value')
+])
+def test_query_parse_condition__tuple(value):
+    result = Query.parse_condition(('col', value))
+    assert result == ('col', value[0], (value[1], ))
+
+
 def test_query_head(patch, table):
     patch.object(Sql, 'select')
     result = Query.head('select', [table], 'options')
