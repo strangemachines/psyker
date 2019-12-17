@@ -45,9 +45,9 @@ class Db:
     def execute(self, query, params, fetch, mode, targets):
         self.cursor.execute(query, params)
         if fetch == 'one':
-            return self.cursor.fetchone(targets)
+            return self.cursor.fetchone(targets, mode=mode)
         elif fetch:
-            return self.cursor.fetchall(targets)
+            return self.cursor.fetchall(targets, mode=mode)
 
     def count(self, query, params=None):
         self.cursor.execute(query, params)

@@ -62,14 +62,14 @@ def test_db_execute(magic, db):
 def test_db_execute__fetch(magic, db):
     db.cursor = magic()
     result = db.execute('query', 'params', True, 'mode', 'targets')
-    db.cursor.fetchall.assert_called_with('targets')
+    db.cursor.fetchall.assert_called_with('targets', mode='mode')
     assert result == db.cursor.fetchall()
 
 
 def test_db_execute__fetchone(magic, db):
     db.cursor = magic()
     result = db.execute('query', 'params', 'one', 'mode', 'targets')
-    db.cursor.fetchone.assert_called_with('targets')
+    db.cursor.fetchone.assert_called_with('targets', mode='mode')
     assert result == db.cursor.fetchone()
 
 
