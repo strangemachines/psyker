@@ -27,8 +27,14 @@ class Psyker:
         self.models = {**self.models, **new_models}
 
     def make_model(self, name, fields):
+        """
+        Creates a model using ModelFactory so that is ready for querying.
+        """
         model = ModelFactory.make(name, fields)
+        model.setup(self.db, len(self.models))
         self.add_models(model)
+        self.db.cursor.models = self.models
+        self.create_tables()
         return model
 
     def create_tables(self):

@@ -41,9 +41,12 @@ def test_psyker_add_models(magic, psyker):
 
 def test_psyker_make_model(patch, psyker):
     patch.object(ModelFactory, 'make')
-    patch.object(Psyker, 'add_models')
+    patch.many(Psyker, ['add_models', 'create_tables'])
     result = psyker.make_model('name', 'fields')
     Psyker.add_models.assert_called_with(result)
+    result.setup.assert_called_with(psyker.db, len(psyker.models))
+    assert psyker.db.cursor.models == psyker.models
+    assert Psyker.create_tables.call_count == 1
     assert result == ModelFactory.make()
 
 

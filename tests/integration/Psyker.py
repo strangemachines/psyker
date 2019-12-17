@@ -160,6 +160,12 @@ def test_psyker_update(psyker, trees):
     assert result[1].max_height == 50
 
 
+def test_psyker_make_model(psyker):
+    seasons = psyker.make_model('seasons', fields={'name': 'str'})
+    seasons(name='winter').save()
+    seasons.drop()
+
+
 def test_psyker_delete(psyker, flies):
     flies.delete().execute()
 
