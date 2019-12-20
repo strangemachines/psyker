@@ -4,44 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -*- coding: utf-8 -*-
-from psyker import Foreign, Model, Psyker
-
-from pytest import fixture
-
-
-@fixture(scope='module')
-def trees():
-    class Trees(Model):
-        @classmethod
-        def columns(cls):
-            return {'name': 'str', 'max_height': 'int'}
-    return Trees
-
-
-@fixture(scope='module')
-def fruits():
-    class Fruits(Model):
-        @classmethod
-        def columns(cls):
-            return {'name': 'str', 'tree': Foreign('tree', 'trees', 'id')}
-    return Fruits
-
-
-@fixture(scope='module')
-def flies():
-    class Flies(Model):
-        @classmethod
-        def columns(cls):
-            return {'name': 'str', 'fruit': Foreign('fruit', 'fruits', 'id')}
-    return Flies
-
-
-@fixture(scope='module')
-def psyker(trees, fruits, flies):
-    psyker = Psyker()
-    psyker.add_models(trees, fruits, flies)
-    psyker.start('postgres://postgres:postgres@localhost:5432/psyker')
-    return psyker
 
 
 def test_psyker_insert(psyker, trees):
@@ -67,69 +29,12 @@ def test_psyker_get__dicts(psyker, trees):
     assert type(result[0]) == dict
 
 
-def test_psyker_select(psyker, trees):
-    assert type(trees.select().get()) == list
-
-
-def test_psyker_select__conditions(psyker, trees):
-    assert len(trees.select(name='pine').get()) == 1
-
-
-def test_psyker_select__where(psyker, trees):
-    assert len(trees.select().where(name='pine').get()) == 1
-
-
-def test_psyker_select__where_gt(psyker, trees):
-    trees = trees.select().where(max_height='>40').get()
-    assert trees[0].max_height > 40
-
-
-def test_psyker_select_where__tuple(psyker, trees):
-    trees = trees.select().where(max_height=('>', 40)).get()
-    assert trees[0].max_height > 40
-
-
-def test_psyker_select_where__tuple_two_chars(psyker, trees):
-    trees = trees.select().where(max_height=('>=', 40)).get()
-    assert trees[0].max_height > 40
-
-
-def test_psyker_select__limit(psyker, trees):
-    assert len(trees.select().limit(1).get()) == 1
-
-
-def test_psyker_select__order_by(psyker, trees):
-    result = trees.select().order_by(max_height='asc').get()
-    assert result[0].max_height == 40
-    assert result[1].max_height == 80
-
-
-def test_psyker_select__random(psyker, trees):
-    assert len(trees.select().random().get()) == 2
-
-
 def test_psyker_count(psyker, trees):
     assert trees.count().get() == 2
 
 
 def test_psyker_count__conditions(psyker, trees):
     assert trees.count(name='pine').get() == 1
-
-
-def test_psyker_one(psyker, trees):
-    assert isinstance(trees.select().one(), trees)
-
-
-def test_psyker_comparison(psyker, trees):
-    pine = trees.select(name='pine').one()
-    same_pine = trees.select(name='pine').one()
-    assert pine == same_pine
-
-
-def test_psyker_comparison__false(psyker, trees):
-    pine = trees.select(name='pine').one()
-    oak = trees.select(name='oak').one()
-    assert (pine == oak) is False
 
 
 def test_psyker_join(psyker, trees, fruits):
