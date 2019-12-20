@@ -47,5 +47,11 @@ class Psyker:
         self.setup_models(self.db, list(self.models.values()))
         self.create_tables()
 
+    def connect(self):
+        """
+        Connects to the database.
+        """
+        self.db.connect()
+
     def close(self):
         self.db.close()

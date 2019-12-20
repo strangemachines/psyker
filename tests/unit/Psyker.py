@@ -69,6 +69,11 @@ def test_psyker_start(patch, psyker):
     assert Psyker.create_tables.call_count == 1
 
 
+def test_psyker_connect(psyker):
+    psyker.connect()
+    assert psyker.db.connect.call_count == 1
+
+
 def test_psyker_close(psyker, db):
     psyker.close()
     assert db.close.call_count == 1
