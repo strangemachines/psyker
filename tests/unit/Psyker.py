@@ -58,12 +58,12 @@ def test_psyker_create_tables(magic, psyker):
 
 def test_psyker_start(patch, psyker):
     patch.init(Db)
-    patch.object(Db, 'connect')
+    patch.object(Db, 'start')
     patch.many(Psyker, ['create_tables', 'setup_models'])
     psyker.start('url')
     Db.__init__.assert_called_with('url', psyker.models)
     assert isinstance(psyker.db, Db)
-    assert Db.connect.call_count == 1
+    assert Db.start.call_count == 1
     Psyker.setup_models.assert_called_with(psyker.db,
                                            list(psyker.models.values()))
     assert Psyker.create_tables.call_count == 1

@@ -43,7 +43,7 @@ class Psyker:
 
     def start(self, url):
         self.db = Db(url, self.models)
-        self.db.connect()
+        self.db.start()
         self.setup_models(self.db, list(self.models.values()))
         self.create_tables()
 
