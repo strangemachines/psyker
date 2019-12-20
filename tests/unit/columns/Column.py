@@ -46,7 +46,10 @@ def test_column_init__options():
 
 @mark.parametrize('field_type,column_type', (
     ('int', 'integer'),
-    ('float', 'numeric'),
+    ('bigint', 'bigint'),
+    ('double', 'double precision'),
+    ('decimal', 'numeric'),
+    ('float', 'real'),
     ('bool', 'boolean'),
     ('serial', 'serial'),
     ('str', 'varchar'),

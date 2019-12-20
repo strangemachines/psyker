@@ -33,8 +33,14 @@ class Column:
         """
         if self.field_type == 'int':
             return 'integer'
-        elif self.field_type == 'float':
+        elif self.field_type == 'bigint':
+            return 'bigint'
+        elif self.field_type == 'double':
+            return 'double precision'
+        elif self.field_type == 'decimal':
             return 'numeric'
+        elif self.field_type == 'float':
+            return 'real'
         elif self.field_type == 'bool':
             return 'boolean'
         elif self.field_type == 'serial':
