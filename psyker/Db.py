@@ -37,13 +37,19 @@ class Db:
 
     def connect(self):
         """
-        Connects to the database and creates the cursor.
+        Connects to the database.
         """
         try:
             self.conn = psycopg2.connect(self.url)
         except psycopg2.OperationalError:
             raise ConnectionError(self.url)
         self.conn.set_session(autocommit=True)
+
+    def start(self):
+        """
+        Connects to the database and creates the cursor.
+        """
+        self.connect()
         self.cursor = self.setup_cursor(self.conn, self.models)
 
     def execute(self, query, params, fetch, mode, targets):

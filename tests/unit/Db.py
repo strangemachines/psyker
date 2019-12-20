@@ -46,13 +46,10 @@ def test_db_get_table(magic, db):
 
 def test_db_connect(patch, db):
     patch.object(psycopg2, 'connect')
-    patch.object(Db, 'setup_cursor')
     db.connect()
     psycopg2.connect.assert_called_with('url')
     psycopg2.connect().set_session.assert_called_with(autocommit=True)
-    Db.setup_cursor.assert_called_with(db.conn, db.models)
     assert db.conn == psycopg2.connect()
-    assert db.cursor == Db.setup_cursor()
 
 
 def test_db_connect__connection_error(patch, db):
@@ -60,6 +57,14 @@ def test_db_connect__connection_error(patch, db):
     patch.object(Db, 'setup_cursor')
     with raises(ConnectionError):
         db.connect()
+
+
+def test_db_start(patch, db):
+    patch.many(Db, ['connect', 'setup_cursor'])
+    db.start()
+    assert Db.connect.call_count == 1
+    Db.setup_cursor.assert_called_with(db.conn, db.models)
+    assert db.cursor == Db.setup_cursor()
 
 
 def test_db_execute(magic, db):
