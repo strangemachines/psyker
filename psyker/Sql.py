@@ -223,6 +223,10 @@ class Sql:
         return Sql.format(cls.column_template(sql, default, primary), *args)
 
     @classmethod
+    def extension(cls, extension):
+        return cls.format(f'create extension "{extension}"')
+
+    @classmethod
     def table(cls, name, columns):
         sql = 'create table if not exists {} ({})'
         return cls.format(sql, Sql.identifier(name),

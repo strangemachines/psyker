@@ -349,6 +349,13 @@ def test_sql_column__sql(patch, magic):
                                   column)
 
 
+def test_table_extension(patch):
+    patch.object(Sql, 'format')
+    result = Sql.extension('ext')
+    Sql.format.assert_called_with('create extension "ext"')
+    assert result == Sql.format()
+
+
 def test_sql_table(patch):
     patch.many(Sql, ['format', 'identifier', 'table_columns'])
     result = Sql.table('name', ['columns'])
