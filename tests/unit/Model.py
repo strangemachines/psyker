@@ -269,6 +269,22 @@ def test_model_delete__conditions(patch):
     Query.delete().where.assert_called_with(col='value')
 
 
+def test_model_truncate(patch):
+    patch.object(Query, 'truncate')
+    patch.object(Model, 'execute')
+    result = Model.truncate()
+    Query.truncate.assert_called_with(Model.__db__, Model.__table__, None)
+    assert Model.__query__ == Query.truncate()
+    assert result == Model.execute()
+
+
+def test_model_truncate__cascade(patch):
+    patch.object(Query, 'truncate')
+    patch.object(Model, 'execute')
+    Model.truncate(cascade=True)
+    Query.truncate.assert_called_with(Model.__db__, Model.__table__, True)
+
+
 def test_model_drop(patch):
     patch.object(Query, 'drop')
     patch.object(Model, 'execute')

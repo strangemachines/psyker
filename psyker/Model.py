@@ -152,6 +152,11 @@ class Model:
         return cls
 
     @classmethod
+    def truncate(cls, cascade=None):
+        cls.__query__ = Query.truncate(cls.__db__, cls.__table__, cascade)
+        return cls.execute()
+
+    @classmethod
     def drop(cls, cascade=None):
         cls.__query__ = Query.drop(cls.__db__, cls.__table__, cascade)
         return cls.execute()
