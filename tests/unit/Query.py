@@ -129,6 +129,14 @@ def test_query_delete__conditions(patch):
     assert result.params == ['value']
 
 
+def test_query_truncate(patch):
+    patch.init(Query)
+    result = Query.truncate('db', 'table', 'cascade')
+    Query.__init__.assert_called_with('db', 'truncate', 'table',
+                                      cascade='cascade')
+    assert isinstance(result, Query)
+
+
 def test_query_drop(patch):
     patch.init(Query)
     result = Query.drop('db', 'table', 'cascade')

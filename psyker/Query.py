@@ -88,6 +88,10 @@ class Query:
         return query
 
     @staticmethod
+    def truncate(db, table, cascade):
+        return Query(db, 'truncate', table, cascade=cascade)
+
+    @staticmethod
     def drop(db, table, cascade):
         return Query(db, 'drop', table, cascade=cascade)
 
