@@ -229,6 +229,13 @@ class Sql:
                           cls.table_columns(columns))
 
     @classmethod
+    def truncate(cls, table, cascade):
+        sql = 'truncate {}'
+        if cascade:
+            sql = f'{sql} cascade'
+        return cls.format(sql, cls.identifier(table))
+
+    @classmethod
     def drop_table(cls, table, cascade):
         sql = 'drop table {}'
         if cascade:

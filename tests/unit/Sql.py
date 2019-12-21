@@ -359,6 +359,20 @@ def test_sql_table(patch):
     assert result == Sql.format()
 
 
+def test_sql_truncate(patch):
+    patch.many(Sql, ['format', 'identifier'])
+    result = Sql.truncate('table', False)
+    Sql.identifier.assert_called_with('table')
+    Sql.format.assert_called_with('truncate {}', Sql.identifier())
+    assert result == Sql.format()
+
+
+def test_sql_truncate__cascade(patch):
+    patch.many(Sql, ['format', 'identifier'])
+    Sql.truncate('table', True)
+    Sql.format.assert_called_with('truncate {} cascade', Sql.identifier())
+
+
 def test_sql_drop_table(patch):
     patch.many(Sql, ['format', 'identifier'])
     result = Sql.drop_table('table', False)
