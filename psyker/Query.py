@@ -61,6 +61,8 @@ class Query:
             return Sql.update(targets[0].name, **targets[1])
         elif query_type == 'delete':
             return Sql.delete(targets[0].name)
+        elif query_type == 'truncate':
+            return Sql.truncate(targets[0].name, options['cascade'])
         elif query_type == 'drop':
             return Sql.drop_table(targets[0].name, options['cascade'])
         elif query_type == 'count':

@@ -71,6 +71,13 @@ def test_query_head__delete(patch, table):
     assert result == Sql.delete()
 
 
+def test_query_head__truncate(patch, table):
+    patch.object(Sql, 'truncate')
+    result = Query.head('truncate', [table], {'cascade': False})
+    Sql.truncate.assert_called_with(table.name, False)
+    assert result == Sql.truncate()
+
+
 def test_query_head__drop(patch, table):
     patch.object(Sql, 'drop_table')
     result = Query.head('drop', [table], {'cascade': False})
