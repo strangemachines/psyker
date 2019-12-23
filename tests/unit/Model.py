@@ -235,6 +235,13 @@ def test_model_one(patch):
     assert result == Model.execute()
 
 
+def test_model_one__no_query(patch):
+    patch.many(Model, ['execute', 'select'])
+    Model.__query__ = None
+    Model.one()
+    Model.select.call_count == 1
+
+
 def test_model_order_by(query):
     Model.__query__ = query
     result = Model.order_by(col='asc')

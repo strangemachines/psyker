@@ -130,6 +130,8 @@ class Model:
 
     @classmethod
     def one(cls):
+        if cls.__query__ is None:
+            cls.select()
         return cls.execute(fetch='one')
 
     @classmethod
