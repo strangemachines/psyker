@@ -48,11 +48,12 @@ class Cursor(NamedTupleCursor):
 
     def fetchone(self, targets, mode=None):
         row = super(NamedTupleCursor, self).fetchone()
-        table = targets[0]
-        row_dict = dict(zip(table.columns.keys(), row))
-        if mode == 'dictionaries':
-            return row_dict
-        return self.models[table.name](**row_dict)
+        if row:
+            table = targets[0]
+            row_dict = dict(zip(table.columns.keys(), row))
+            if mode == 'dictionaries':
+                return row_dict
+            return self.models[table.name](**row_dict)
 
     def make_related(self, row, targets, mode=None):
         """

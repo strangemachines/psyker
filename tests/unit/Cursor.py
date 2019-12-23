@@ -48,6 +48,12 @@ def test_cursor_fetchone(patch, cursor):
     pass
 
 
+@mark.skip
+def test_cursor_fetchone__none(patch, cursor):
+    # NOTE(vesuvium): it's not possible to patch NamedTupleCursor.fetchone
+    pass
+
+
 def test_cursor_make_related(patch, magic, cursor):
     patch.object(Cursor, 'make')
     target = magic(columns={'col': 'col'})

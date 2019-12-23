@@ -71,6 +71,10 @@ def test_psyker_select_one(psyker, trees):
     assert isinstance(trees.select().one(), trees)
 
 
+def test_psyker_select_one__none(psyker, trees):
+    assert trees.select(name='walnut').one() is None
+
+
 def test_psyker_select_dictionaries(psyker, trees):
     result = trees.dictionaries()
     assert type(result[0]) == dict
@@ -79,6 +83,10 @@ def test_psyker_select_dictionaries(psyker, trees):
 def test_psyker_select_dictionary(psyker, trees):
     result = trees.dictionary()
     assert type(result) == dict
+
+
+def test_psyker_select_dictionary__none(psyker, trees):
+    assert trees.select(name='walnut').dictionary() is None
 
 
 def test_psyker_select_comparison(psyker, trees):
