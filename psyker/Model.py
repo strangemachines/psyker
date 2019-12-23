@@ -114,9 +114,19 @@ class Model:
 
     @classmethod
     def dictionaries(cls):
+        """
+        Produces a list of dictionaries instead of model instances, at the
+        cursor level.
+        """
         if cls.__query__ is None:
             cls.select()
         return cls.execute(fetch=True, mode='dictionaries')
+
+    @classmethod
+    def dictionary(cls):
+        if cls.__query__ is None:
+            cls.select()
+        return cls.execute(fetch='one', mode='dictionaries')
 
     @classmethod
     def one(cls):

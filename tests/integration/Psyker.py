@@ -24,11 +24,6 @@ def test_psyker_get(psyker, trees):
     assert isinstance(result[0], trees)
 
 
-def test_psyker_get__dicts(psyker, trees):
-    result = trees.dictionaries()
-    assert type(result[0]) == dict
-
-
 def test_psyker_count(psyker, trees):
     assert trees.count().get() == 2
 
@@ -59,12 +54,11 @@ def test_psyker_join__three(psyker, trees, fruits, flies):
 
 
 def test_psyker_join__dictionaries(psyker, trees, fruits):
-    pine = trees.select(name='pine').one()
-    pinecone = fruits.select(tree=pine.id).one()
+    pine = trees.select(name='pine').dictionary()
+    pinecone = fruits.select(tree=pine['id']).dictionary()
     result = fruits.select().join('trees', 'tree').dictionaries()
-    expected = {**pinecone.as_dictionary(), 'trees': (pine.as_dictionary(), )}
-    assert result[0] == expected
-    assert result[0]['trees'][0] == pine.as_dictionary()
+    assert result[0] == {**pinecone, 'trees': (pine, )}
+    assert result[0]['trees'][0] == pine
 
 
 def test_psyker_update(psyker, trees):

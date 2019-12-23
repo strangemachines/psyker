@@ -210,7 +210,21 @@ def test_model_dictionaries(patch):
 def test_model_dictionaries__no_query(patch):
     patch.many(Model, ['execute', 'select'])
     Model.__query__ = None
-    Model.get()
+    Model.dictionaries()
+    assert Model.select.call_count == 1
+
+
+def test_model_dictionary(patch):
+    patch.object(Model, 'execute')
+    result = Model.dictionary()
+    Model.execute.assert_called_with(fetch='one', mode='dictionaries')
+    assert result == Model.execute()
+
+
+def test_model_dictionary__no_query(patch):
+    patch.many(Model, ['execute', 'select'])
+    Model.__query__ = None
+    Model.dictionary()
     assert Model.select.call_count == 1
 
 
