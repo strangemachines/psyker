@@ -98,20 +98,26 @@ def test_model_related_as_dictionary__none(model, table):
     assert model.related_as_dictionary({}) == {}
 
 
-def test_model_as_dictionary(model, table):
+def test_model_as_dictionary(patch, model, table):
+    patch.object(Model, 'related_as_dictionary')
     table.columns = {'col': 'value'}
     Model.__table__ = table
     Model.col = 'value'
     result = model.as_dictionary()
-    assert result == {'col': 'value'}
+    Model.related_as_dictionary.assert_called_with({'col': 'value'})
+    assert result == Model.related_as_dictionary()
 
 
-def test_model_as_dictionary__id(model, table):
+def test_model_as_dictionary__id(patch, model, table):
+    patch.object(Model, 'related_as_dictionary')
     table.columns = {'col': 'value', 'id': 'id'}
     Model.__table__ = table
     Model.col = 'value'
     Model.id = 'id'
-    assert model.as_dictionary() == {'col': 'value', 'id': 'id'}
+    result = model.as_dictionary()
+    Model.related_as_dictionary.assert_called_with({'col': 'value',
+                                                    'id': 'id'})
+    assert result == Model.related_as_dictionary()
 
 
 def test_model_save(patch, model, table, db):

@@ -57,7 +57,9 @@ class Model:
 
     def as_dictionary(self):
         """
-        Returns the instance as dictionary.
+        Returns the instance as dictionary. Intended to be used to convert to
+        a dictionary on the fly. Otherwise, Model.dictionary and
+        Model.dictionaries are faster.
         """
         values = {}
         for column in self.__table__.columns.keys():
@@ -65,7 +67,7 @@ class Model:
                 values[column] = getattr(self, column)
         if hasattr(self, 'id'):
             values['id'] = self.id
-        return values
+        return self.related_as_dictionary(values)
 
     def save(self, fetch='id'):
         """
