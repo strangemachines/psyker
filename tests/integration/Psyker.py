@@ -58,6 +58,15 @@ def test_psyker_join__three(psyker, trees, fruits, flies):
     assert result[0].fruits[0].trees[0] == pine
 
 
+def test_psyker_join__dictionaries(psyker, trees, fruits):
+    pine = trees.select(name='pine').one()
+    pinecone = fruits.select(tree=pine.id).one()
+    result = fruits.select().join('trees', 'tree').dictionaries()
+    expected = {**pinecone.as_dictionary(), 'trees': (pine.as_dictionary(), )}
+    assert result[0] == expected
+    assert result[0]['trees'][0] == pine.as_dictionary()
+
+
 def test_psyker_update(psyker, trees):
     trees.update(max_height=50).execute()
     result = trees.get()

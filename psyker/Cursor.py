@@ -63,8 +63,7 @@ class Cursor(NamedTupleCursor):
         model = self.models[targets[0].name]
         start = len(columns)
         if mode == 'dictionaries':
-            return self.make_dicts(model, row[start:], columns.keys(),
-                                   targets[1:])
+            return self.make_dicts(row[start:], columns.keys(), targets[1:])
         return self.make(model, row[start:], columns.keys(), targets[1:])
 
     def make(self, model, row, columns, targets):

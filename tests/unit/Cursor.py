@@ -62,8 +62,7 @@ def test_cursor_make_related__mode(patch, magic, cursor):
     target = magic(columns={'col': 'col'})
     cursor.models = {target.name: 'model'}
     result = cursor.make_related('row', [target], mode='dictionaries')
-    Cursor.make_dicts.assert_called_with('model', 'ow', {'col': 'col'}.keys(),
-                                         [])
+    Cursor.make_dicts.assert_called_with('ow', {'col': 'col'}.keys(), [])
     assert result == Cursor.make_dicts()
 
 
