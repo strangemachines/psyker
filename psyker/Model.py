@@ -46,6 +46,15 @@ class Model:
         cls.__query__ = None
         return result
 
+    def related_as_dictionary(self, values):
+        for relationship in self.__table__.relationships:
+            name = relationship.name
+            if hasattr(self, name):
+                values[name] = [
+                    item.as_dictionary() for item in getattr(self, name)
+                ]
+        return values
+
     def as_dictionary(self):
         """
         Returns the instance as dictionary.

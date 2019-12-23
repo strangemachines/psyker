@@ -84,6 +84,20 @@ def test_model_execute_mode(query):
     query.execute.assert_called_with(None, 'mode')
 
 
+def test_model_related_as_dictionary(magic, model, table):
+    table.relationships = [magic()]
+    table.relationships[0].name = 'rel'
+    Model.__table__ = table
+    item = magic()
+    Model.rel = [item]
+    assert model.related_as_dictionary({}) == {'rel': [item.as_dictionary()]}
+
+
+def test_model_related_as_dictionary__none(model, table):
+    Model.__table__ = table
+    assert model.related_as_dictionary({}) == {}
+
+
 def test_model_as_dictionary(model, table):
     table.columns = {'col': 'value'}
     Model.__table__ = table
